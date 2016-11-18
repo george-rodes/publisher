@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="br.com.anagnostou.tabbed.MainActivity">
+    <item
+        android:id="@+id/action_updateDatabase"
+        android:orderInCategory="100"
+        android:title="@string/action_update_database"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="200"
+        android:title="@string/action_preferences"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_clear"
+        android:orderInCategory="300"
+        android:title="@string/limpar_historico"
+        android:icon="@drawable/ic_action_clear"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_search"
+        android:title="@string/menu_search"
+        android:icon="@drawable/ic_action_search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+
+</menu>

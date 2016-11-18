@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="br.com.anagnostou.tabbed.AtividadesActivity">
+
+    <include
+        android:id="@+id/atividades_toolbar"
+        layout="@layout/app_bar" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/atividades_toolbar"
+        android:background="@color/colorPrimary"
+        android:padding="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/depressed_color"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPubDados"
+                style="@style/publisherDetailsTitleLarge"
+                android:text="Dados Pessoais" />
+
+            <TextView
+                android:id="@+id/tvPub5"
+                style="@style/publisherDetailsLarge"
+                android:text="Idade:" />
+
+            <TextView
+                android:id="@+id/tvPub6"
+                style="@style/publisherDetailsLarge"
+                android:text="Tempo de Batismo" />
+
+            <TextView
+                android:id="@+id/tvPub1"
+                style="@style/publisherDetailsLarge"
+                android:text="Familia: " />
+
+            <TextView
+                android:id="@+id/tvPub2"
+                style="@style/publisherDetailsLarge"
+                android:text="Grupo:" />
+
+            <TextView
+                android:id="@+id/tvPubTitle"
+                style="@style/publisherDetailsTitleLarge"
+                android:text="Médias últimos x Meses" />
+
+            <TextView
+                android:id="@+id/tvPub7"
+                style="@style/publisherDetailsLarge"
+               android:text="Média Horas 6 Meses" />
+
+            <TextView
+                android:id="@+id/tvPub8"
+                style="@style/publisherDetailsLarge"
+
+                android:text="Média Revisitas 6 Meses" />
+
+            <TextView
+                android:id="@+id/tvPub9"
+                style="@style/publisherDetailsLarge"
+                android:text="Média Estudos 6 Meses" />
+
+            <TextView
+                android:id="@+id/tvPub13"
+                style="@style/publisherDetailsLarge"
+                android:text="Média Videos" />
+
+            <TextView
+                android:id="@+id/tvPub14"
+                style="@style/publisherDetailsLarge"
+               android:text="Média Publicações" />
+
+            <TextView
+                android:id="@+id/tvPub10"
+                style="@style/publisherDetailsLarge"
+                android:text="Saiu de Pioneiro Auxiliar x vezes" />
+
+            <TextView
+                android:id="@+id/tvPub11"
+                style="@style/publisherDetailsLarge"
+                android:text="Deixou de relatar x vezes" />
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/publisherDetailsTitleLarge"
+                android:text="Contato" />
+
+            <TextView
+                android:id="@+id/tvPub3"
+                style="@style/publisherDetailsLarge"
+                android:text="Rua" />
+
+            <TextView
+                android:id="@+id/tvPub4"
+                style="@style/publisherDetailsLarge"
+                android:text="Bairro" />
+
+            <TextView
+                android:id="@+id/tvPub12"
+                style="@style/publisherDetailsLarge"
+                android:text="Extra" />
+
+            <TextView
+                style="@style/publisherDetailsLarge" />
+
+            <TextView
+                style="@style/publisherDetailsLarge"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/LLam1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentTop="false"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="false">
+
+        <TextView
+            android:id="@+id/tvPubFone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/button"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="015-981...58.27.26"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="24sp" />
+
+        <ImageButton
+            android:id="@+id/button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary"
+            android:onClick="ligarFone"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_call_white_24dp"
+            android:textSize="20dp" />
+    </LinearLayout>
+</RelativeLayout>

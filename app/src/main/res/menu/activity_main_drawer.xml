@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/publicadores"
+            android:icon="@drawable/ic_people_48dp"
+            android:title="@string/publicadores_por_grupos" />
+        <item
+            android:id="@+id/porPrivilegio"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/por_privilegio" />
+
+    </group>
+
+
+
+</menu>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#bec5ff"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="br.com.anagnostou.tabbed.Settings">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="Local dos Arquivos de Importação"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvUpdate"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="Update" />
+
+            <EditText
+                android:id="@+id/etUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:ems="10"
+                android:inputType="textVisiblePassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvCadastro"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="Cadastro" />
+
+            <EditText
+                android:id="@+id/etCadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:ems="10"
+                android:inputType="textVisiblePassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tvRelatorio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="Relatório" />
+            <EditText
+                android:id="@+id/etRelatorio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:ems="10"
+                android:inputType="textVisiblePassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvHomepage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Servidor" />
+
+        <EditText
+            android:id="@+id/etHomepage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:ems="10"
+            android:inputType="textVisiblePassword" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/getPreferences"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="GET Preferences"
+                android:onClick="getPreferences"/>
+
+            <Button
+                android:id="@+id/setPreferences"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SET Preferences"
+                android:onClick="setPreferences"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true">
+
+        <Button
+            android:id="@+id/resetPreferences"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_restore_black_24dp"
+
+            android:layout_alignParentStart="true"
+            android:contentDescription="Factory Reset"
+            android:onClick="factoryReset"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset"
+            android:textSize="15sp"
+            android:layout_below="@+id/resetPreferences"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" />
+
+        <Button
+            android:id="@+id/returnHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_home_black_24dp"
+            android:onClick="returnMainActivity"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tela Inicial"
+            android:textSize="15sp"
+            android:layout_below="@+id/returnHome"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

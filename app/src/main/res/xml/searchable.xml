@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/searchable"
+    android:hint="@string/searchable"
+    android:searchSuggestAuthority="br.com.anagnostou.tabbed.MyCustomSuggestionProvider"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestIntentData="content://br.com.anagnostou.tabbed.MyCustomSuggestionProvider/publicador"
+    android:searchSuggestSelection=" ?"
+    android:searchSuggestThreshold="1"
+    android:includeInGlobalSearch="true"  >
+
+</searchable>

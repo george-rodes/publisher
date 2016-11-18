@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Atividades da Congregação</string>
+    <string name="action_update_database">Atualizar Registros</string>
+    <string name="action_preferences">Preferências</string>
+    <string name="section_format">1. Conecte com a Internet\n2. Entre no Menu de Preferências\n3. Clique em \'Atualizar Registros\'</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="grupo_de_estudo_adriano">Grupo de Estudo Adriano</string>
+    <string name="i_am_the_centro_fragment">I am the Centro Fragment</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="bofete">Congregação Bofete</string>
+    <string name="publicadores_por_grupos">Lista Por Grupo</string>
+    <string name="por_privilegio">Lista Por Privilégio</string>
+    <string name="searchable">Buscar</string>
+    <string name="menu_search">Buscar</string>
+    <string name="rebanho">\"Você deve conhecer bem a aparência do seu rebanho\"\n Provérbios 27:23</string>
+    <string name="limpar_historico">Limpar historico</string>
+    <string name="cartao">Cartão</string>
+    <string name="envia_cartao">Envia Cartão</string>
+    <string name="publicacoes">Publicações</string>
+    <string name="videos">Videos</string>
+    <string name="horas">Horas</string>
+    <string name="revisitas">Revisitas</string>
+    <string name="estudos">Estudos</string>
+    <string name="public_abrev">Public.</string>
+    <string name="mes">Mês</string>
+    <string name="data">Data</string>
+    <string name="totais">Totais</string>
+
+</resources>
