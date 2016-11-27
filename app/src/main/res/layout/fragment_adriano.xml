@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="br.com.anagnostou.tabbed.Adriano">
+    tools:context="br.com.anagnostou.publisher.Adriano">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="br.com.anagnostou.tabbed.Splash"
+    tools:context="br.com.anagnostou.publisher.Splash"
     android:background="#000">
     <ImageView
         android:layout_width="wrap_content"

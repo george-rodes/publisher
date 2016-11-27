@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/depressed_color"
     android:orientation="vertical"
-    tools:context="br.com.anagnostou.tabbed.CartaoActivity">
+    tools:context="br.com.anagnostou.publisher.CartaoActivity">
 
     <include
         android:id="@+id/cartao_toolbar"

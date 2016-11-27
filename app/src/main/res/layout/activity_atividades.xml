@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="br.com.anagnostou.tabbed.AtividadesActivity">
+    tools:context="br.com.anagnostou.publisher.AtividadesActivity">
 
     <include
         android:id="@+id/atividades_toolbar"
