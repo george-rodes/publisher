@@ -1,4 +1,4 @@
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 import android.content.Intent;
 import android.os.Handler;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.anagnostou.tabbed">
+    package="br.com.anagnostou.publisher">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/SplashScreenTheme">
-        <activity android:name=".Splash">
+        <activity android:name="br.com.anagnostou.publisher.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="br.com.anagnostou.publisher.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -29,22 +29,22 @@
                 android:value=".SearchResults" />
         </activity>
         <activity
-            android:name=".Settings"
+            android:name="br.com.anagnostou.publisher.Settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AtividadesActivity"
+            android:name="br.com.anagnostou.publisher.AtividadesActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="br.com.anagnostou.publisher.MainActivity" />
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchResults" />
         </activity>
-        <activity android:name=".SearchResults">
+        <activity android:name="br.com.anagnostou.publisher.SearchResults">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="br.com.anagnostou.publisher.MainActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -57,15 +57,15 @@
 
         <!-- Content Provider to query sqlite database -->
         <provider
-            android:name=".MyCustomSuggestionProvider"
-            android:authorities="br.com.anagnostou.tabbed.MyCustomSuggestionProvider"
+            android:name="br.com.anagnostou.publisher.MyCustomSuggestionProvider"
+            android:authorities="br.com.anagnostou.publisher.MyCustomSuggestionProvider"
             android:exported="true" />
 
-        <activity android:name=".CartaoActivity"
+        <activity android:name="br.com.anagnostou.publisher.CartaoActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="br.com.anagnostou.publisher.MainActivity" />
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchResults" />

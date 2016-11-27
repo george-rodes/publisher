@@ -1,4 +1,4 @@
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 /**
  * Created by George on 26/07/2016.

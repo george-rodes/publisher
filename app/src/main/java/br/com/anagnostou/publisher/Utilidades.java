@@ -1,4 +1,4 @@
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -381,14 +381,14 @@ int newVersion = oldVersion + 1;
    fos = "/sdcard/cadastro.txt";
          downloadingFileName = "Cadastro";
          final DownloadTask downloadPublicadorTask = new DownloadTask(getApplicationContext());
-         downloadPublicadorTask.execute("http://www.anagnostou.com.br/overseer/cadastro.txt");
+         downloadPublicadorTask.execute("http://www.anagnostou.com.br.com.anagnostou.br/overseer/cadastro.txt");
 
          fos = "/sdcard/relatorio.txt";
          downloadingFileName = "Relatorio";
          final DownloadTask downloadRelatorioTask = new DownloadTask(getApplicationContext());
-         downloadRelatorioTask.execute("http://www.anagnostou.com.br/overseer/relatorio.txt");
+         downloadRelatorioTask.execute("http://www.anagnostou.com.br.com.anagnostou.br/overseer/relatorio.txt");
 
          fos = "/sdcard/update.txt";
          downloadingFileName = "versao";
          final DownloadTask downloadVersaoTask = new DownloadTask(getApplicationContext());
-         downloadVersaoTask.execute("http://www.anagnostou.com.br/overseer/update.txt");
+         downloadVersaoTask.execute("http://www.anagnostou.com.br.com.anagnostou.br/overseer/update.txt");

@@ -1,4 +1,4 @@
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

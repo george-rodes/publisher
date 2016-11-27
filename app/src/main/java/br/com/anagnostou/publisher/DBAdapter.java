@@ -1,4 +1,4 @@
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 import android.app.SearchManager;
 import android.content.ContentValues;
@@ -17,9 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class DBAdapter {
     DBHelper mydbHelper;

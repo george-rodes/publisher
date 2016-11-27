@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.1"
 
     defaultConfig {
-        applicationId "br.com.anagnostou.tabbed"
+        applicationId "br.com.anagnostou.publisher"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 6

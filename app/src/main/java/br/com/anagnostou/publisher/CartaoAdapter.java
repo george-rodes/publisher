@@ -1,4 +1,4 @@
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Created by George on 04/09/2016.

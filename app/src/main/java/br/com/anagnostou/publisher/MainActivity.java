@@ -1,181 +1,18 @@
-__________________________________________________
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://br.com.anagnostou.tabbed/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://br.com.anagnostou.tabbed/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
-
-_______________________________________________________
- private SearchPagerAdapter searchPagerAdapter;
-searchPagerAdapter = new SearchPagerAdapter(getSupportFragmentManager());
-
-public class SearchPagerAdapter extends FragmentStatePagerAdapter {
-
-        public SearchPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            /** searchResultsFragment**/
-            if (position == 0 && bancoTemDados) {
-                Bundle bundle = new Bundle();
-                bundle.putString("querTy", nameSearch);
-                resultadosFragment = new Resultados();
-                resultadosFragment.setArguments(bundle);
-                return resultadosFragment;
-            }
-
-            /* No results Fragment*/
-            vazioFragment = new Vazio();
-            return vazioFragment;
-        }
-
-        @Override // Show x total pages.
-        public int getCount() {
-            return 1;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "RESULTADOS DE BUSCA";
-                case 1:
-                    return "OUTRO";
-            }
-            return null;
-        }
-    }
-________________________
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorPrimary"
-    app:layout_scrollFlags="scroll|enterAlways"
-    app:popupTheme="@style/AppTheme.PopupOverlay"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
-________________________
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
-
-
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context="br.com.anagnostou.tabbed.MainActivity">
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/appbar_padding_top"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    </android.support.design.widget.CoordinatorLayout>
-
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
-
-</android.support.v4.widget.DrawerLayout>
-
-
-
-
-______________________________________________________________________________________________
-2016.08.13.22.51
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
-import android.net.Uri;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -187,6 +24,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -208,9 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    /**
-     * SHAREDPREFERENCES
-     **/
     private String spUpdate;
     private String spCadastro;
     private String spRelatorio;
@@ -218,20 +53,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences sp;
     private static final String NA = "N/A";
     SharedPreferences.Editor editor;
-    /******
-     * put these parameters where you can edit them
-     */
     String fosPublicador;
     String fosRelatorio;
-    String fosVersao;
-
+    String fosUpdate;
+    String sdcard;
     DBAdapter dbAdapter;
     SQLiteDatabase sqLiteDatabase;
     String sDataServidor;
     Boolean bancoTemDados = false;
     ConnectivityManager connMgr;
     Boolean bBackgroundJobs = false;
-
     Adriano adrianoFragment;
     Centro centroFragment;
     SalaoDoReino salaoFragment;
@@ -241,21 +72,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Pioneiros pioneirosFragment;
     Servos servosFragment;
     Pregadores pregadoresFragment;
-
-
+    String nameSearch;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private SecondSectionsPagerAdapter secondSectionsPagerAdapter;
-    /***
-     * The {@link ViewPager} that will host the section contents.
-     ***/
     private ViewPager mViewPager;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        /** http://stackoverflow.com/questions/22083639/calling-activity-from-fragment-then-return-to-fragment
-         * returns to the calling fragment */
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,17 +83,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //L.m("qqqqqqqqqqq ");
 
         /******NEW DrawerLayout *********/
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        /******************/
 
+        /******************/
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         secondSectionsPagerAdapter = new SecondSectionsPagerAdapter(getSupportFragmentManager());
@@ -281,7 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        //mViewPager.setAdapter(secondSectionsPagerAdapter);
+        getSupportActionBar().setTitle("Por Grupo");
+        getSupportActionBar().setSubtitle("Atividades da Congregação");
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -294,10 +116,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             spCadastro = sp.getString("cadastro", NA);
             spRelatorio = sp.getString("relatorio", NA);
             spHomepage = sp.getString("homepage", NA);
-
+            //sdcard = Environment.getExternalStorageDirectory().toString();
+            //sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
+            //sdcard = Environment.getExternalStorageDirectory().getPath();
             fosPublicador = "/sdcard/" + spCadastro;
             fosRelatorio = "/sdcard/" + spRelatorio;
-            fosVersao = "/sdcard/" + spUpdate;
+            fosUpdate = "/sdcard/" + spUpdate;
 
             bBackgroundJobs = false;
             dbAdapter = new DBAdapter(getApplicationContext());
@@ -309,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     && Utilidades.existeTabela("versao", MainActivity.this)) {
                 if (Utilidades.temDadosNoBanco(MainActivity.this)) {
                     final CheckUpdateAvailable checkUpdateAvailable = new CheckUpdateAvailable(getApplicationContext());
-                    checkUpdateAvailable.execute(spHomepage + spUpdate, fosVersao);
+                    checkUpdateAvailable.execute(spHomepage + spUpdate, fosUpdate);
                     bancoTemDados = true;
                 }
             } else {
@@ -321,6 +145,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        /** SEARCH **/
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -337,6 +165,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, Settings.class));
             return true;
+        }
+
+        if (id==R.id.action_clear){
         }
         return super.onOptionsItemSelected(item);
     }
@@ -364,13 +195,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 centroFragment = new Centro();
                 return centroFragment;
             }
+
+            if (position == 4 && bancoTemDados) {
+                anciaosFragment = new Anciaos();
+                return anciaosFragment;
+            }
+            if (position == 5 && bancoTemDados) {
+                servosFragment = new Servos();
+                return servosFragment;
+            }
+
+            if (position == 6 && bancoTemDados) {
+                pregadoresFragment = new Pregadores();
+                return pregadoresFragment;
+            }
+
+            if (position == 7 && bancoTemDados) {
+                pioneirosFragment = new Pioneiros();
+                return pioneirosFragment;
+            }
+
             vazioFragment = new Vazio();
             return vazioFragment;
         }
 
         @Override // Show x total pages.
         public int getCount() {
-            return 4;
+            return 8;
         }
 
         @Override
@@ -384,6 +235,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return "VILA NOVA";
                 case 3:
                     return "CENTRO";
+
+                /** TABS SCROLLABLE *******/
+                case 4:
+                    return "ANCIÃOS";
+                case 5:
+                    return "SERVOS";
+                case 6:
+                    return "PUBLICADORES";
+                case 7:
+                    return "PIONEIROS";
+
             }
             return null;
         }
@@ -447,18 +309,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.publicadores) {
             // Handle the camera action
             mViewPager.setAdapter(mSectionsPagerAdapter);
+            getSupportActionBar().setTitle("Por Grupo");
         } else if (id == R.id.porPrivilegio) {
             mViewPager.setAdapter(secondSectionsPagerAdapter);
-
+            getSupportActionBar().setTitle("Por Privilégio");
         }
 
-        /**
-        else if (id == R.id.anciaos) {
-        } else if (id == R.id.nav_manage) {
-        } else if (id == R.id.nav_share) {
-        } else if (id == R.id.nav_send) {
-        }
-        **/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -468,13 +324,91 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Utilidades.isOnline((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))) {
             /** em vez de chamar a activity, chamar varias Asynctask que uma chama a outra através do onPostExecute */
             if (!bBackgroundJobs) {
-                final DownloadTaskRelatorio downloadRelatorioTask = new DownloadTaskRelatorio(getApplicationContext());
-                downloadRelatorioTask.execute(spHomepage + spRelatorio);
+                final DownloadTaskUpdate downloadTaskUpdate = new DownloadTaskUpdate(getApplicationContext());
+                downloadTaskUpdate.execute(spHomepage + spUpdate);
             } else L.t(getApplicationContext(), "Background Jobs in Progress");
             return true;
         } else {
             L.t(getApplicationContext(), "Sem Conexão com a Internet");
             return false;
+        }
+    }
+
+    class DownloadTaskUpdate extends AsyncTask<String, Integer, String> {
+        private Context context;
+        AlertDialog.Builder builder1;
+        AlertDialog alert11;
+
+        public DownloadTaskUpdate(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            bBackgroundJobs = true;
+            L.m("Baixando Arquivo update.txt\n");
+            builder1 = new AlertDialog.Builder(MainActivity.this);
+            builder1.setMessage("Aguarde! Baixando update.txt..");
+            alert11 = builder1.create();
+            alert11.show();
+        }
+
+        @Override
+        protected String doInBackground(String... sUrl) {
+            InputStream input = null;
+            OutputStream output = null;
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(sUrl[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) return "No HTTP ";
+                input = connection.getInputStream();
+                output = new FileOutputStream(fosUpdate);
+                byte data[] = new byte[4096];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    // allow canceling with back button
+                    if (isCancelled()) {
+                        input.close();
+                        return null;
+                    }
+                    total += count;
+                    output.write(data, 0, count);
+                }
+            } catch (Exception e) {
+                return e.toString();
+            } finally {
+                try {
+                    if (output != null)
+                        output.close();
+                    if (input != null)
+                        input.close();
+                } catch (IOException ignored) {
+                }
+                if (connection != null)
+                    connection.disconnect();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result != null) {
+                L.m("Update NÃO foi baixado\n");
+                alert11.dismiss();
+            } else {
+                L.m("Update baixado\n");
+                alert11.dismiss();
+                final DownloadTaskRelatorio downloadRelatorioTask = new DownloadTaskRelatorio(getApplicationContext());
+                downloadRelatorioTask.execute(spHomepage + spRelatorio);
+
+            }
         }
     }
 
@@ -619,11 +553,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             //4 . Populate Database
             for (Relatorio r : rel) {
-                long i = dbAdapter.insertDataRelatorio(r.ano, r.mes, r.nome, r.modalidade, r.videos, r.horas, r.publicacoes, r.revisitas, r.estudos);
+                long i = dbAdapter.insertDataRelatorio(r);
                 publishProgress((int) (i * 100 / counter));
             }
-            /**
-             * inserir a data da ultima atualizacao insertDataVersao(String versao)
+            /** inserir a data da ultima atualizacao insertDataVersao(String versao)
              * ler a data do arquivo e comparar
              */
             File fileU = new File(sdcard, spUpdate);
@@ -814,9 +747,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             //4 . Populate Database
             for (Publicador p : pub) {
-                long i = dbAdapter.insertDataPublicador(p.nome, p.familia, p.grupo, p.batismo, p.nascimento,
-                        p.fone, p.celular, p.rua, p.bairro, p.ansepu, p.pipu, p.sexo);
-                //L.m(p.nome + " " + p.grupo);
+                long i = dbAdapter.insertDataPublicador(p);
                 publishProgress((int) (i * 100 / counter));
             }
             return null;
@@ -837,11 +768,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bancoTemDados = true;
                 L.m("Publicadores atualizados\n");
                 progressDialog.dismiss();
-                //mSectionsPagerAdapter.
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+
             }
         }
     }
-
 
     class CheckUpdateAvailable extends AsyncTask<String, Integer, String> {
         private Context context;
@@ -942,5 +873,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        /** http://stackoverflow.com/questions/22083639/calling-activity-from-fragment-then-return-to-fragment
+         * returns to the calling fragment */
     }
 }

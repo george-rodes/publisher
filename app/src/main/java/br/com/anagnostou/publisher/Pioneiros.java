@@ -1,4 +1,4 @@
-package br.com.anagnostou.tabbed;
+package br.com.anagnostou.publisher;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,30 +13,30 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class Servos extends Fragment {
+public class Pioneiros extends Fragment {
     View rootView;
-    ListView servosListView;
+    ListView pioneirosListView;
     DBAdapter dbAdapter;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
 
-    public Servos() { }
+    public Pioneiros() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView =  inflater.inflate(R.layout.fragment_servos, container, false);
-        servosListView = (ListView) rootView.findViewById(R.id.servosListView);
+        rootView = inflater.inflate(R.layout.fragment_pioneiros, container, false);
+        pioneirosListView = (ListView) rootView.findViewById(R.id.pioneirosListView);
         dbAdapter = new DBAdapter(rootView.getContext());
         sqLiteDatabase = dbAdapter.mydbHelper.getWritableDatabase();
-        cursor = dbAdapter.cursorPublicadorPorAnsepu("Servo");
-
+        cursor = dbAdapter.cursorPioneiroPublicador("Pioneiro");
         if (cursor.getCount() > 0) {
             CursorAdapter listAdapter = new SimpleCursorAdapter(rootView.getContext(), R.layout.row,
                     cursor, new String[]{"nome", "familia"}, new int[]{R.id.nameTextView, R.id.familyTextView}, 0);
-            servosListView.setAdapter(listAdapter);
+            pioneirosListView.setAdapter(listAdapter);
         }
-        servosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        pioneirosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
@@ -46,8 +46,6 @@ public class Servos extends Fragment {
                 startActivity(intent);
             }
         });
-
         return rootView;
     }
-
 }
