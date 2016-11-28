@@ -30,5 +30,7 @@
     <string name="mes">Mês</string>
     <string name="data">Data</string>
     <string name="totais">Totais</string>
+    <string name="geral">Geral</string>
+    <string name="preferencias">Preferências</string>
 
 </resources>

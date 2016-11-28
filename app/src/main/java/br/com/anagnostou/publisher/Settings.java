@@ -71,9 +71,6 @@ public class Settings extends AppCompatActivity {
         }
     }
 
-
-
-
     public void getPreferences(View v) {
         etUpdate.setText(sp.getString("update", DEFAULT));
         etCadastro.setText(sp.getString("cadastro", DEFAULT));

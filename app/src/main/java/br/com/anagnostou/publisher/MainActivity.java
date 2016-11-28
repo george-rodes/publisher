@@ -2,9 +2,11 @@ package br.com.anagnostou.publisher;
 
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -13,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private SecondSectionsPagerAdapter secondSectionsPagerAdapter;
     private ViewPager mViewPager;
+    BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         /******************/
+
+        broadcastReceiver = new PowerConnectionReceiver();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         secondSectionsPagerAdapter = new SecondSectionsPagerAdapter(getSupportFragmentManager());
@@ -140,7 +146,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 atualizarBancoDeDados(getCurrentFocus());
             }
         } else startActivity(new Intent(this, Settings.class));
+
+        carregaPreferencias();
     }
+
+    private void carregaPreferencias() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean usarDadosCelurares = sharedPreferences.getBoolean("usarDadosCelurares", false);
+        L.t(this, "usarDadosCelurares: " + usarDadosCelurares);
+        L.t(this, sharedPreferences.getString("server", ""));
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter i = new IntentFilter("android.intent.action.ACTION_POWER_CONNECTED");
+        registerReceiver(broadcastReceiver, i);
+
+        IntentFilter i2 = new IntentFilter("android.intent.action.ACTION_POWER_DISCONNECTED");
+        registerReceiver(broadcastReceiver, i2);
+
+        /**  IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+         registerReceiver(broadcastReceiver,iFilter);*/
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            L.t(this, "Nothing Registered");
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            L.t(this, "Nothing Registered");
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,11 +218,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, Settings.class));
+            //startActivity(new Intent(this, Settings.class));
+            startActivity(new Intent(this, AppPreferences.class));
             return true;
         }
 
-        if (id==R.id.action_clear){
+        if (id == R.id.action_clear) {
         }
         return super.onOptionsItemSelected(item);
     }

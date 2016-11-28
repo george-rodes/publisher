@@ -5,15 +5,21 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-
+    <!--<uses-permission android:name="android.permission.CALL_PHONE" />
+    <receiver android:name=".PowerConnectionReceiver">
+        <intent-filter>
+            <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+            <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            <action android:name="android.intent.action.ACTION_BATTERY_CHANGED"/>
+        </intent-filter>
+    </receiver>-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/SplashScreenTheme">
-        <activity android:name="br.com.anagnostou.publisher.Splash">
+        <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="br.com.anagnostou.publisher.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -29,10 +35,16 @@
                 android:value=".SearchResults" />
         </activity>
         <activity
-            android:name="br.com.anagnostou.publisher.Settings"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".Settings"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name="br.com.anagnostou.publisher.AtividadesActivity"
+            android:name=".AtividadesActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -41,7 +53,7 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchResults" />
         </activity>
-        <activity android:name="br.com.anagnostou.publisher.SearchResults">
+        <activity android:name=".SearchResults">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.anagnostou.publisher.MainActivity" />
@@ -57,11 +69,12 @@
 
         <!-- Content Provider to query sqlite database -->
         <provider
-            android:name="br.com.anagnostou.publisher.MyCustomSuggestionProvider"
+            android:name=".MyCustomSuggestionProvider"
             android:authorities="br.com.anagnostou.publisher.MyCustomSuggestionProvider"
             android:exported="true" />
 
-        <activity android:name="br.com.anagnostou.publisher.CartaoActivity"
+        <activity
+            android:name=".CartaoActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -69,8 +82,16 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchResults" />
-
         </activity>
+        <activity android:name=".AppPreferences"
+            android:label="@string/preferencias"
+            android:parentActivityName=".MainActivity"
+
+           />
+
+
     </application>
+
+
 
 </manifest>
