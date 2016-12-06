@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -78,15 +77,15 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchResults" />
         </activity>
-        <activity android:name=".AppPreferences"
+        <activity
+            android:name=".AppPreferences"
             android:label="@string/preferencias"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".MainActivity" />
 
-           />
-
-
+        <!--<service-->
+            <!--android:name=".CheckSQLService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="false"/>-->
     </application>
 
-
-
-</manifest>gi
+</manifest>

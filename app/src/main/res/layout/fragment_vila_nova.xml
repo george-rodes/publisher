@@ -4,16 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     tools:context="br.com.anagnostou.publisher.VilaNova">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/vilaListView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
+
             android:paddingBottom="60dp"/>
-    </LinearLayout>
+
 </FrameLayout>

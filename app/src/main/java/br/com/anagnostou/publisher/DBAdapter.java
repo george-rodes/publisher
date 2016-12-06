@@ -178,15 +178,30 @@ public class DBAdapter {
         return db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, DBHelper.GRUPO + " = ?", selectionArgs, null, null, DBHelper.FAMILIA);
     }
 
-    public Cursor cursorSugestaoPublicador(String query) {
+     Cursor cursorVaroesBatizados() {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
-        String[] columns = {DBHelper.UID, DBHelper.NOME};
-        query = "%" + query.trim() + "%";
-        String[] selectionArgs = {query};
-        return db.rawQuery("SELECT _id, nome AS SUGGEST_COLUMN_TEXT_1, rowid AS SUGGEST_COLUMN_INTENT_DATA_ID FROM publicador WHERE NOME LIKE ? ", selectionArgs);
-        //return db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, DBHelper.NOME + " LIKE ? ", selectionArgs, null, null,null);
+        String[] selectionArgs = {"","M","Ancião"};
+        return db.rawQuery("SELECT _id,nome,familia FROM publicador WHERE data_batismo <> ? AND sexo = ? AND ansepu <> ?", selectionArgs);
 
     }
+    Cursor cursorNaoBatizados() {
+        SQLiteDatabase db = mydbHelper.getWritableDatabase();
+        String[] selectionArgs = {""};
+        return db.rawQuery("SELECT _id,nome,familia FROM publicador WHERE data_batismo = ? ORDER BY nome", selectionArgs);
+
+    }
+
+    Cursor irregulares(String ano, String mesini, String mesfim ) {
+        SQLiteDatabase db = mydbHelper.getWritableDatabase();
+        String[] selectionArgs = {ano, mesini, mesfim};
+        return db.rawQuery("SELECT DISTINCT publicador._id,  relatorio.nome, publicador.familia FROM relatorio,publicador " +
+                "WHERE  relatorio.nome = publicador.nome AND relatorio.ano = ? " +
+                "AND relatorio.mes > ? AND relatorio.mes < ?" +
+                "AND relatorio.horas < 1 " +
+                "ORDER BY relatorio.nome", selectionArgs);
+    }
+
+
 
     public Cursor cursorPublicadorBusca(String query) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();

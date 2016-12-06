@@ -10,6 +10,11 @@
             android:id="@+id/porPrivilegio"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/por_privilegio" />
+        <item
+            android:id="@+id/pesquisasEspeciais"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/pesquisas_especiais" />
+
 
     </group>
 

@@ -4,17 +4,13 @@
     android:layout_height="match_parent"
     tools:context="br.com.anagnostou.publisher.Anciaos"
     android:background="@color/colorPrimary">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/anciaosListView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
+
             android:paddingBottom="60dp"
-            android:layout_alignParentLeft="true" />
-    </LinearLayout>
+            />
+
 </FrameLayout>

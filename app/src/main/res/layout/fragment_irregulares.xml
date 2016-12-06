@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="br.com.anagnostou.publisher.Adriano">
+    tools:context=".Irregulares">
 
         <ListView
+            android:id="@+id/irregularesListView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/adrianoListView"
-
-            android:paddingBottom="60dp"
-            />
+            android:paddingBottom="60dp" />
 
 </FrameLayout>

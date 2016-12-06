@@ -3,10 +3,12 @@ package br.com.anagnostou.publisher;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -15,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -45,10 +48,13 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private String DATABASE_NAME ;
+    private String DB_FULL_PATH;
     private String spUpdate;
     private String spCadastro;
     private String spRelatorio;
@@ -75,11 +81,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Pioneiros pioneirosFragment;
     Servos servosFragment;
     Pregadores pregadoresFragment;
+    VaroesBatizados  varoesBatizadosFragment;
     String nameSearch;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private SecondSectionsPagerAdapter secondSectionsPagerAdapter;
+    private SpecialPagerAdapter specialPagerAdapter;
     private ViewPager mViewPager;
     BroadcastReceiver broadcastReceiver;
+    private Intent checkSQLServerIntent;
+    private CheckSQLService checkSQLService;
+    private boolean isServiceBound;
+    private ServiceConnection serviceConnection;
+    private boolean mStopLoop;
+
+
+    private void bindService(){
+        if (serviceConnection == null){
+            serviceConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                    CheckSQLService.MyServiceBinder myServiceBinder = (CheckSQLService.MyServiceBinder)iBinder;
+                    checkSQLService = myServiceBinder.getService();
+                    isServiceBound = true;
+                }
+                @Override
+                public void onServiceDisconnected(ComponentName componentName) {
+                    isServiceBound = false;
+                }
+            };
+        }
+        bindService(checkSQLServerIntent,serviceConnection,Context.BIND_AUTO_CREATE);
+    }
+
+    private void unbindService(){
+        if(isServiceBound){
+            unbindService(serviceConnection);
+            isServiceBound=false;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //L.m("qqqqqqqqqqq ");
 
         /******NEW DrawerLayout *********/
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -104,12 +143,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         secondSectionsPagerAdapter = new SecondSectionsPagerAdapter(getSupportFragmentManager());
+        specialPagerAdapter = new SpecialPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        getSupportActionBar().setTitle("Por Grupo");
-        getSupportActionBar().setSubtitle("Atividades da Congregação");
+        getSupportActionBar().setTitle(R.string.por_grupo);
+        getSupportActionBar().setSubtitle(getString(R.string.atividades_da_congregacao));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -125,13 +165,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //sdcard = Environment.getExternalStorageDirectory().toString();
             //sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
             //sdcard = Environment.getExternalStorageDirectory().getPath();
-            fosPublicador = "/sdcard/" + spCadastro;
-            fosRelatorio = "/sdcard/" + spRelatorio;
-            fosUpdate = "/sdcard/" + spUpdate;
+            fosPublicador = getString(R.string.sdcard) + spCadastro;
+            fosRelatorio = getString(R.string.sdcard) + spRelatorio;
+            fosUpdate = getString(R.string.sdcard) + spUpdate;
 
             bBackgroundJobs = false;
             dbAdapter = new DBAdapter(getApplicationContext());
             sqLiteDatabase = dbAdapter.mydbHelper.getWritableDatabase();
+            DATABASE_NAME = dbAdapter.mydbHelper.getDatabaseName();
+            DB_FULL_PATH = sqLiteDatabase.getPath();
             bBackgroundJobs = false;
 
             if (Utilidades.existeTabela("relatorio", MainActivity.this)
@@ -147,53 +189,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         } else startActivity(new Intent(this, Settings.class));
 
-        carregaPreferencias();
+        /**
+       carregaPreferencias();
+       checkSQLServerIntent = new Intent(this,CheckSQLService.class);
+       startService(checkSQLServerIntent);
+       bindService();
+       */
     }
 
     private void carregaPreferencias() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean usarDadosCelurares = sharedPreferences.getBoolean("usarDadosCelurares", false);
-        L.t(this, "usarDadosCelurares: " + usarDadosCelurares);
-        L.t(this, sharedPreferences.getString("server", ""));
-
-
+        //L.t(this, "usarDadosCelurares: " + usarDadosCelurares);
+        //L.t(this, sharedPreferences.getString("server", ""));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        /** Testes para BROADCASTRECEIVER
         IntentFilter i = new IntentFilter("android.intent.action.ACTION_POWER_CONNECTED");
         registerReceiver(broadcastReceiver, i);
-
         IntentFilter i2 = new IntentFilter("android.intent.action.ACTION_POWER_DISCONNECTED");
         registerReceiver(broadcastReceiver, i2);
-
-        /**  IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+         IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
          registerReceiver(broadcastReceiver,iFilter);*/
-
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
+        /** Testes para BROADCASTRECEIVER
         try {
             unregisterReceiver(broadcastReceiver);
         } catch (Exception e) {
             L.t(this, "Nothing Registered");
         }
+        */
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
+        /** try {
             unregisterReceiver(broadcastReceiver);
+            unbindService();
         } catch (Exception e) {
             L.t(this, "Nothing Registered");
-        }
+        }*/
     }
 
 
@@ -218,12 +262,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         if (id == R.id.action_settings) {
-            //startActivity(new Intent(this, Settings.class));
-            startActivity(new Intent(this, AppPreferences.class));
+
+            startActivity(new Intent(this, Settings.class));
+            //startActivity(new Intent(this, AppPreferences.class));
+            /* if(isServiceBound){
+                L.t(this,"Get Randomnumber: " + checkSQLService.getmRandomNumber());
+
+            }*/
             return true;
         }
 
         if (id == R.id.action_clear) {
+            copyDataBaseSdCard();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -357,18 +407,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public class SpecialPagerAdapter extends FragmentStatePagerAdapter {
+        public SpecialPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            //IRREGULARES
+            if (position == 0 && bancoTemDados) {
+                return new Irregulares();
+            }
+            //VARÕES BATIZADOS
+            if (position == 1 && bancoTemDados) {
+                return new VaroesBatizados();
+            }
+            if (position == 2 && bancoTemDados) {
+                return new NaoBatizados();
+            }
+            //NÃO BATIZADOS
+            if (position == 3 && bancoTemDados) {
+                return new NaoBatizados();
+            }
+
+            vazioFragment = new Vazio();
+            return vazioFragment;
+        }
+
+        @Override // Show x total pages.
+        public int getCount() {
+            return 4;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "IRREGULARES";
+                case 1:
+                    return "VARÕES BATIZADOS";
+                case 2:
+                    return "MENOS DE UM ANO DE BATISMO";
+                case 3:
+                    return "NÃO BATIZADOS";
+
+            }
+            return null;
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.publicadores) {
-            // Handle the camera action
             mViewPager.setAdapter(mSectionsPagerAdapter);
-            getSupportActionBar().setTitle("Por Grupo");
+            getSupportActionBar().setTitle(getString(R.string.por_grupo));
         } else if (id == R.id.porPrivilegio) {
             mViewPager.setAdapter(secondSectionsPagerAdapter);
-            getSupportActionBar().setTitle("Por Privilégio");
+            getSupportActionBar().setTitle(getString(R.string.por_privilegio));
+        } else if (id == R.id.pesquisasEspeciais) {
+            mViewPager.setAdapter(specialPagerAdapter);
+            getSupportActionBar().setTitle(getString(R.string.pesquisas_especiais));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -378,7 +478,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public boolean atualizarBancoDeDados(View v) {
         if (Utilidades.isOnline((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))) {
-            /** em vez de chamar a activity, chamar varias Asynctask que uma chama a outra através do onPostExecute */
+            /** em vez de chamar a activity, chamar várias Asynctask que uma chama a outra através do onPostExecute */
             if (!bBackgroundJobs) {
                 final DownloadTaskUpdate downloadTaskUpdate = new DownloadTaskUpdate(getApplicationContext());
                 downloadTaskUpdate.execute(spHomepage + spUpdate);
@@ -402,7 +502,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPreExecute() {
             bBackgroundJobs = true;
-            L.m("Baixando Arquivo update.txt\n");
+
             builder1 = new AlertDialog.Builder(MainActivity.this);
             builder1.setMessage("Aguarde! Baixando update.txt..");
             alert11 = builder1.create();
@@ -456,14 +556,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                L.m("Update NÃO foi baixado\n");
                 alert11.dismiss();
             } else {
-                L.m("Update baixado\n");
                 alert11.dismiss();
                 final DownloadTaskRelatorio downloadRelatorioTask = new DownloadTaskRelatorio(getApplicationContext());
                 downloadRelatorioTask.execute(spHomepage + spRelatorio);
-
             }
         }
     }
@@ -480,7 +577,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPreExecute() {
             bBackgroundJobs = true;
-            L.m("Baixando Relatórios\n");
             builder1 = new AlertDialog.Builder(MainActivity.this);
             builder1.setMessage("Aguarde! Baixando Relatorios..");
             alert11 = builder1.create();
@@ -534,10 +630,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                L.m("Relatórios NÃO foram baixados\n");
                 alert11.dismiss();
             } else {
-                L.m("Relatórios baixados\n");
                 alert11.dismiss();
                 if (Utilidades.findLocalFiles(spRelatorio)) {
                     final TaskRelatorio taskRelatorio = new TaskRelatorio(MainActivity.this);
@@ -559,11 +653,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setProgress(0);
             progressDialog.show();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            L.m("Atualizando Relatórios\n");
         }
 
         @Override
@@ -641,7 +730,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
             dbAdapter.insertDataVersao(sDataServidor);
-            //L.m("Data no Servidor: " + sDataServidor);
             return null;
         }
 
@@ -654,10 +742,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(String result) {
             if (result != null) {
                 progressDialog.dismiss();
-                L.m("Relatórios NÃO atualizados\n");
             } else {
                 progressDialog.dismiss();
-                L.m("Relatórios atualizados\n");
                 final DownloadTaskPublicador downloadPublicadorTask = new DownloadTaskPublicador(MainActivity.this);
                 downloadPublicadorTask.execute(spHomepage + spCadastro);
             }
@@ -675,11 +761,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             builder1.setMessage("Aguarde! Baixando Cadastro de Publicadores..");
             alert11 = builder1.create();
             alert11.show();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            L.m("Baixando Registros de Publicadores\n");
         }
 
         @Override
@@ -723,10 +804,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                L.m("Registros de Publicadores NÃO foram baixados\n");
                 alert11.dismiss();
             } else {
-                L.m("Registros de Publicadores baixados\n");
                 alert11.dismiss();
                 if (Utilidades.findLocalFiles(spCadastro)) {
                     final TaskPublicador taskPublicador = new TaskPublicador(MainActivity.this);
@@ -751,22 +830,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
-        protected void onPreExecute() {
-            L.m("Atualizando Cadastro Publicadores\n");
-        }
-
-        @Override
         protected String doInBackground(String... sUrl) {
             if (!sqLiteDatabase.isOpen())
                 sqLiteDatabase = dbAdapter.mydbHelper.getWritableDatabase();
             dbAdapter.mydbHelper.dropTablePublicador(sqLiteDatabase);
-
-            //L.m("Populate Publicador");
-            //Verificar se existe arquivo
-            //sqLiteDatabase = dbAdapter.mydbHelper.getWritableDatabase();
-            //int oldVersion = sqLiteDatabase.getVersion();
-            //int newVersion = oldVersion + 1;
-            //dbAdapter.mydbHelper.onUpgrade(sqLiteDatabase, oldVersion, newVersion);
             //1. Loads file from external storage /sdcard, accessible via explorer
             File sdcard = Environment.getExternalStorageDirectory();
             File file = new File(sdcard, spCadastro);
@@ -818,11 +885,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(String result) {
             bBackgroundJobs = false;
             if (result != null) {
-                L.m("Publicadores NÃO atualizados\n");
                 progressDialog.dismiss();
             } else {
                 bancoTemDados = true;
-                L.m("Publicadores atualizados\n");
                 progressDialog.dismiss();
                 mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -835,12 +900,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         public CheckUpdateAvailable(Context context) {
             this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //L.t(MainActivity.this, "Checking if an Update is available");
         }
 
         @Override
@@ -907,7 +966,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                //L.m("Download Error");
             } else {
                 if (!Utilidades.comparaData(dbAdapter.selectVersao(), sDataServidor).contentEquals("mesma data")) {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
@@ -933,10 +991,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //super.onActivityResult(requestCode, resultCode, data);
-
+       //super.onActivityResult(requestCode, resultCode, data);
         /** http://stackoverflow.com/questions/22083639/calling-activity-from-fragment-then-return-to-fragment
          * returns to the calling fragment */
     }
+
+    public void copyDataBaseSdCard() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            if (sd.canWrite()) {
+                String currentDBPath = DB_FULL_PATH;
+                String backupDBPath = DATABASE_NAME;
+                File currentDB = new File(currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+                if (currentDB.exists()) {
+
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch (Exception e) {
+            L.m(e.toString());
+        }
+    }
+
+
+
 }

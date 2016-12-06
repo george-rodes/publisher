@@ -102,3 +102,16 @@
         <item name="android:gravity">right</item>
     </style>
 </resources
+
+
+
+public Cursor cursorSugestaoPublicador(String query) {
+        SQLiteDatabase db = mydbHelper.getWritableDatabase();
+        String[] columns = {DBHelper.UID, DBHelper.NOME};
+        query = "%" + query.trim() + "%";
+        String[] selectionArgs = {query};
+        return db.rawQuery("SELECT _id, nome AS SUGGEST_COLUMN_TEXT_1, rowid AS SUGGEST_COLUMN_INTENT_DATA_ID FROM publicador WHERE NOME LIKE ? ", selectionArgs);
+        //return db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, DBHelper.NOME + " LIKE ? ", selectionArgs, null, null,null);
+
+    }
+
