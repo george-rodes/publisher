@@ -1,3 +1,44 @@
+
+return db.rawQuery("SELECT DISTINCT publicador._id,  relatorio.nome, publicador.familia FROM relatorio,publicador " +
+                "WHERE  relatorio.nome = publicador.nome " +
+                "AND relatorio.ano >= ? " +
+                "AND relatorio.ano <= ? " +
+                "AND relatorio.mes >= ? AND relatorio.mes <= ?" +
+                "AND relatorio.horas < 1 " +
+                "ORDER BY relatorio.nome", selectionArgs);
+
+        /**
+         * consulta em Janeiro, periodo 7,8,9,10,11,12 do ano anterior
+         * Anoini=anofinal = calendar.get(Calendar.YEAR) - 1;
+         * mesini = calendar.get(Calendar.MONTH) (0) + 7
+         * mesfim = calendar.get(Calendar.MONTH) (0) + 12 = mesini + 5 = 12
+         *
+         * consulta em Fevereior, periodo 8,9,10,11,12 do ano anterior e 1 do ano atual
+         * anoini= calendar.get(Calendar.YEAR) - 1;
+         * anofinal = anoini + 1;
+         * mesfim = calendar.get(Calendar.MONTH) (1)
+         * mesini = calendar.get(Calendar.MONTH) (1)
+         *
+         * outro SQL
+         *
+         *
+         *
+         * consulta em Dezembro, imesfim = 12, periodo 11,10,9,8,7,6
+         * imsefim =  imesfim - 1 = 11, imesini = imesfim - 5 = 6
+         *
+         * consulta em Julho, imesfim = 7, periodo 6,5,4,3,2,1
+         * imsefim =  imesfim - 1 = 6, imesini = imesfim - 5 = 1
+         *
+         *
+         *
+         * consulta em Junho, imesfim = 6, periodo 5,4,3,2,1,12
+         * imsefim =  imesfim - 1 = 5, imesini = imesfim - 5 + 12 = 12
+         *
+         *preciso distinguir valor menor malor maior
+         *
+         *
+        */
+
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

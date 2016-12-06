@@ -30,63 +30,71 @@ public class DBAdapter {
         // This HashMap is used to map table fields to Custom Suggestion fields
         mAliasMap = new HashMap<String, String>();
         // Unique id for the each Suggestions ( Mandatory )
-        mAliasMap.put("_ID", "_id as _id" );
+        mAliasMap.put("_ID", "_id as _id");
         // Text for Suggestions ( Mandatory )
         mAliasMap.put(SearchManager.SUGGEST_COLUMN_TEXT_1, "nome as " + SearchManager.SUGGEST_COLUMN_TEXT_1);
         // Icon for Suggestions ( Optional )
-        mAliasMap.put( SearchManager.SUGGEST_COLUMN_ICON_1, "1  as " + SearchManager.SUGGEST_COLUMN_ICON_1);
+        mAliasMap.put(SearchManager.SUGGEST_COLUMN_ICON_1, "1  as " + SearchManager.SUGGEST_COLUMN_ICON_1);
         // This value will be appended to the Intent data on selecting an item from Search result or Suggestions ( Optional )
-        mAliasMap.put( SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "_id as " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID );
+        mAliasMap.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "_id as " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
 
     }
 
     /************************ SEARCH ****************************************/
-    /** Returns Countries */
-    public Cursor getPublicadores(String[] selectionArgs){
+    /**
+     * Returns Countries
+     */
+    public Cursor getPublicadores(String[] selectionArgs) {
         String selection = DBHelper.NOME + " like ? ";
-        if(selectionArgs!=null){
-            selectionArgs[0] = "%"+selectionArgs[0] + "%";
+        if (selectionArgs != null) {
+            selectionArgs[0] = "%" + selectionArgs[0] + "%";
         }
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setProjectionMap(mAliasMap);
         queryBuilder.setTables(DBHelper.TABLE_NAME_PUBLICADOR);
         Cursor c = queryBuilder.query(mydbHelper.getReadableDatabase(),
-                new String[] { "_ID",
-                        SearchManager.SUGGEST_COLUMN_TEXT_1 ,
-                        SearchManager.SUGGEST_COLUMN_ICON_1 ,
-                        SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID } ,
+                new String[]{"_ID",
+                        SearchManager.SUGGEST_COLUMN_TEXT_1,
+                        SearchManager.SUGGEST_COLUMN_ICON_1,
+                        SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID},
                 selection,
                 selectionArgs,
                 null,
                 null,
-                DBHelper.NOME + " asc ","10"
+                DBHelper.NOME + " asc ", "10"
         );
         return c;
     }
 
-    /** Return Publisher corresponding to the id, not used*/
-    public Cursor getPublicador(String id){
+    /**
+     * Return Publisher corresponding to the id, not used
+     */
+    public Cursor getPublicador(String id) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DBHelper.TABLE_NAME_PUBLICADOR);
         Cursor c = queryBuilder.query(mydbHelper.getReadableDatabase(),
-                new String[] { "_id", "name", "familia", "grupo" } ,
-                "_id = ?", new String[] { id } , null, null, null ,"1"
+                new String[]{"_id", "name", "familia", "grupo"},
+                "_id = ?", new String[]{id}, null, null, null, "1"
         );
         return c;
     }
 
-    /** Return Publisher corresponding to the id */
-    public Cursor getOnePublicador(String id){
+    /**
+     * Return Publisher corresponding to the id
+     */
+    public Cursor getOnePublicador(String id) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DBHelper.TABLE_NAME_PUBLICADOR);
         Cursor c = queryBuilder.query(mydbHelper.getReadableDatabase(),
-                new String[] { "nome" } ,
-                "_id = ?", new String[] { id } , null, null, null ,"1"
+                new String[]{"nome"},
+                "_id = ?", new String[]{id}, null, null, null, "1"
         );
         return c;
     }
 
-    /*************************  PUBLICADOR ***************************/
+    /*************************
+     * PUBLICADOR
+     ***************************/
     public void exportPublicador() throws IOException {
         int rowcount = 0;
         int colcount = 0;
@@ -178,12 +186,13 @@ public class DBAdapter {
         return db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, DBHelper.GRUPO + " = ?", selectionArgs, null, null, DBHelper.FAMILIA);
     }
 
-     Cursor cursorVaroesBatizados() {
+    Cursor cursorVaroesBatizados() {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
-        String[] selectionArgs = {"","M","Ancião"};
+        String[] selectionArgs = {"", "M", "Ancião"};
         return db.rawQuery("SELECT _id,nome,familia FROM publicador WHERE data_batismo <> ? AND sexo = ? AND ansepu <> ?", selectionArgs);
 
     }
+
     Cursor cursorNaoBatizados() {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] selectionArgs = {""};
@@ -191,16 +200,26 @@ public class DBAdapter {
 
     }
 
-    Cursor irregulares(String ano, String mesini, String mesfim ) {
+    Cursor irregularesJaneiroDezembro(String ano, String mesini, String mesfim) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] selectionArgs = {ano, mesini, mesfim};
         return db.rawQuery("SELECT DISTINCT publicador._id,  relatorio.nome, publicador.familia FROM relatorio,publicador " +
-                "WHERE  relatorio.nome = publicador.nome AND relatorio.ano = ? " +
-                "AND relatorio.mes > ? AND relatorio.mes < ?" +
+                "WHERE  relatorio.nome = publicador.nome " +
                 "AND relatorio.horas < 1 " +
+                "AND relatorio.ano = ? AND relatorio.mes >= ? AND relatorio.mes <= ?" +
                 "ORDER BY relatorio.nome", selectionArgs);
     }
 
+    Cursor irregularesCruzaAno(String anoini, String mesini, String mesfim, String anofim, String mesini1, String mesfim1) {
+        SQLiteDatabase db = mydbHelper.getWritableDatabase();
+        String[] selectionArgs = {anoini, mesini, mesfim, anofim, mesini1, mesfim1};
+        return db.rawQuery("SELECT DISTINCT publicador._id,  relatorio.nome, publicador.familia FROM relatorio,publicador " +
+                "WHERE  relatorio.nome = publicador.nome " +
+                "AND relatorio.horas < 1 " +
+                "AND ((relatorio.ano = ? AND relatorio.mes >= ? AND relatorio.mes <= ?) " +
+                "OR (relatorio.ano = ? AND relatorio.mes >= ? AND relatorio.mes <= ? )) " +
+                "ORDER BY relatorio.nome", selectionArgs);
+    }
 
 
     public Cursor cursorPublicadorBusca(String query) {
@@ -485,11 +504,6 @@ public class DBAdapter {
 
         private DBHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
-
-
-
-
-
 
 
         }
