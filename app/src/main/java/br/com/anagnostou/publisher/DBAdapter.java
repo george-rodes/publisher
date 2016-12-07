@@ -44,7 +44,7 @@ public class DBAdapter {
     /**
      * Returns Countries
      */
-    public Cursor getPublicadores(String[] selectionArgs) {
+    Cursor getPublicadores(String[] selectionArgs) {
         String selection = DBHelper.NOME + " like ? ";
         if (selectionArgs != null) {
             selectionArgs[0] = "%" + selectionArgs[0] + "%";
@@ -69,7 +69,7 @@ public class DBAdapter {
     /**
      * Return Publisher corresponding to the id, not used
      */
-    public Cursor getPublicador(String id) {
+    Cursor getPublicador(String id) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DBHelper.TABLE_NAME_PUBLICADOR);
         Cursor c = queryBuilder.query(mydbHelper.getReadableDatabase(),
@@ -82,7 +82,7 @@ public class DBAdapter {
     /**
      * Return Publisher corresponding to the id
      */
-    public Cursor getOnePublicador(String id) {
+    Cursor getOnePublicador(String id) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DBHelper.TABLE_NAME_PUBLICADOR);
         Cursor c = queryBuilder.query(mydbHelper.getReadableDatabase(),
@@ -145,14 +145,14 @@ public class DBAdapter {
         c.close();
     }
 
-    public Cursor retrieveRelatorios(String nome) {
+    Cursor retrieveRelatorios(String nome) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String orderBy = " ano asc, mes asc ";
         String[] selectionArgs = {nome};
         return db.query(DBHelper.TABLE_NAME_RELATORIO, null, DBHelper.NOME + " = ? ", selectionArgs, null, null, orderBy);
     }
 
-    public String findFirstPublicador() {
+    String findFirstPublicador() {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.NOME};
         Cursor cursor = db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, null, null, null, null, null, "1");
@@ -167,7 +167,7 @@ public class DBAdapter {
         return sb.toString();
     }
 
-    public String selectVersao() {
+    String selectVersao() {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.ULTIMA_ATUALIZACAO};
         Cursor cursor = db.query(DBHelper.TABLE_NAME_VERSAO, columns, null, null, null, null, null);
@@ -179,7 +179,7 @@ public class DBAdapter {
         return sb.toString();
     }
 
-    public Cursor cursorPublicadorPorGrupo(String grupo) {
+    Cursor cursorPublicadorPorGrupo(String grupo) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.UID, DBHelper.NOME, DBHelper.FAMILIA};
         String[] selectionArgs = {grupo};
@@ -188,8 +188,8 @@ public class DBAdapter {
 
     Cursor cursorVaroesBatizados() {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
-        String[] selectionArgs = {"", "M", "Ancião"};
-        return db.rawQuery("SELECT _id,nome,familia FROM publicador WHERE data_batismo <> ? AND sexo = ? AND ansepu <> ?", selectionArgs);
+        String[] selectionArgs = {"", "M", "Publicador"};
+        return db.rawQuery("SELECT _id,nome,familia FROM publicador WHERE data_batismo <> ? AND sexo = ? AND ansepu = ?", selectionArgs);
 
     }
 
@@ -221,8 +221,16 @@ public class DBAdapter {
                 "ORDER BY relatorio.nome", selectionArgs);
     }
 
+    Cursor menosDeUmAnoDeBatismo(String anoini, String mesini, String anofim) {
+        SQLiteDatabase db = mydbHelper.getReadableDatabase();
+        String[] selectionArgs = {anoini,mesini,anofim};
+        return db.rawQuery("select  _id, nome, familia from publicador where data_batismo <> '' AND  " +
+                "((substr(data_batismo,7,4) = ? AND substr(data_batismo,4,2) >= ? )  OR substr(data_batismo,7,4) = ? ) order by nome",selectionArgs);
 
-    public Cursor cursorPublicadorBusca(String query) {
+    }
+
+
+    Cursor cursorPublicadorBusca(String query) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.UID, DBHelper.NOME, DBHelper.FAMILIA};
         query = "%" + query.trim() + "%";
@@ -230,21 +238,21 @@ public class DBAdapter {
         return db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, DBHelper.NOME + " LIKE ? ", selectionArgs, null, null, DBHelper.FAMILIA);
     }
 
-    public Cursor cursorPublicadorPorAnsepu(String ansepu) {
+    Cursor cursorPublicadorPorAnsepu(String ansepu) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.UID, DBHelper.NOME, DBHelper.FAMILIA};
         String[] selectionArgs = {ansepu};
         return db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, DBHelper.ANSEPU + " = ?", selectionArgs, null, null, DBHelper.NOME);
     }
 
-    public Cursor cursorPioneiroPublicador(String pipu) {
+    Cursor cursorPioneiroPublicador(String pipu) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.UID, DBHelper.NOME, DBHelper.FAMILIA};
         String[] selectionArgs = {pipu};
         return db.query(DBHelper.TABLE_NAME_PUBLICADOR, columns, DBHelper.PIPU + " = ?", selectionArgs, null, null, DBHelper.NOME);
     }
 
-    public Publicador[] retrievePublisherData(String name) {
+    Publicador[] retrievePublisherData(String name) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.FAMILIA, DBHelper.GRUPO, DBHelper.BATISMO, DBHelper.CELULAR,
                 DBHelper.RUA, DBHelper.NASCIMENTO, DBHelper.FONE, DBHelper.BAIRRO, DBHelper.ANSEPU, DBHelper.PIPU, DBHelper.SEXO};
@@ -323,7 +331,7 @@ public class DBAdapter {
         c.close();
     }
 
-    public String findFirstRelatorio() {
+    String findFirstRelatorio() {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] columns = {DBHelper.UID, DBHelper.ANO, DBHelper.MES, DBHelper.NOME, DBHelper.HORAS};
         StringBuilder sb = new StringBuilder();
@@ -348,7 +356,7 @@ public class DBAdapter {
         }
     }
 
-    public String[] somaHorasMeses(String nome) {
+    String[] somaHorasMeses(String nome) {
         String[] resultado = {"n/a", "n/a", "n/a", "n/a", "n/a", "n/a"};
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] selectionArgs = {nome};
@@ -375,7 +383,7 @@ public class DBAdapter {
 
     }
 
-    public String[] retrieveTotais(String nome) {
+    String[] retrieveTotais(String nome) {
         String[] resultado = {"n/a", "n/a", "n/a", "n/a", "n/a", "n/a"};
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] selectionArgs = {nome};
@@ -402,7 +410,7 @@ public class DBAdapter {
 
     }
 
-    public String contaPioneiroAuxiliar(String nome) {
+    String contaPioneiroAuxiliar(String nome) {
         String resultado;
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] selectionArgs = {nome, "Pioneiro Auxiliar"};
@@ -418,7 +426,7 @@ public class DBAdapter {
         }
     }
 
-    public String deixouDeRelatar(String nome) {
+    String deixouDeRelatar(String nome) {
         String resultado;
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         String[] selectionArgs = {nome, "0"};
@@ -437,7 +445,7 @@ public class DBAdapter {
     /*****************************************
      * INSERT
      ****************************************/
-    public long insertDataPublicador(Publicador p) {
+    long insertDataPublicador(Publicador p) {
 
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -460,7 +468,7 @@ public class DBAdapter {
         return id;
     }
 
-    public long insertDataVersao(String versao) {
+    long insertDataVersao(String versao) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.ULTIMA_ATUALIZACAO, versao);
@@ -470,7 +478,7 @@ public class DBAdapter {
         return id;
     }
 
-    public long insertDataRelatorio(Relatorio r) {
+    long insertDataRelatorio(Relatorio r) {
         SQLiteDatabase db = mydbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.ANO, r.ano);
