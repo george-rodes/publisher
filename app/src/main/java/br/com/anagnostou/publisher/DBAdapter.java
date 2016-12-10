@@ -44,7 +44,7 @@ public class DBAdapter {
     /**
      * Returns Countries
      */
-    Cursor getPublicadores(String[] selectionArgs) {
+    public Cursor getPublicadores(String[] selectionArgs) {
         String selection = DBHelper.NOME + " like ? ";
         if (selectionArgs != null) {
             selectionArgs[0] = "%" + selectionArgs[0] + "%";
@@ -69,7 +69,7 @@ public class DBAdapter {
     /**
      * Return Publisher corresponding to the id, not used
      */
-    Cursor getPublicador(String id) {
+    public Cursor getPublicador(String id) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DBHelper.TABLE_NAME_PUBLICADOR);
         Cursor c = queryBuilder.query(mydbHelper.getReadableDatabase(),
@@ -82,7 +82,7 @@ public class DBAdapter {
     /**
      * Return Publisher corresponding to the id
      */
-    Cursor getOnePublicador(String id) {
+    public Cursor getOnePublicador(String id) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DBHelper.TABLE_NAME_PUBLICADOR);
         Cursor c = queryBuilder.query(mydbHelper.getReadableDatabase(),

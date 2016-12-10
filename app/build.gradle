@@ -8,8 +8,8 @@ android {
         applicationId "br.com.anagnostou.publisher"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 6
-        versionName "6.16.09.04.21.54"
+        versionCode 7
+        versionName "7.16.12.10.13.11"
     }
     buildTypes {
         release {

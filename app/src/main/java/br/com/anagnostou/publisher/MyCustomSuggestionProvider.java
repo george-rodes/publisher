@@ -16,7 +16,7 @@ public class MyCustomSuggestionProvider extends ContentProvider {
     DBAdapter dbAdapter;
     SQLiteDatabase sqLiteDatabase;
 
-    private static final String AUTHORITY = "br.com.anagnostou.br.com.anagnostou.publisher.MyCustomSuggestionProvider";
+    private static final String AUTHORITY = "br.com.anagnostou.publisher.MyCustomSuggestionProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/publicador");
     private static final int SUGGESTIONS_PUBLICADOR = 1;
     private static final int SEARCH_PUBLICADOR = 2;
